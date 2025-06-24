@@ -5,6 +5,10 @@ This script tests if all required dependencies are properly installed.
 """
 
 import sys
+import os
+
+# Add the src directory to the Python path
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 def test_import(module_name, description):
     """Test if a module can be imported"""

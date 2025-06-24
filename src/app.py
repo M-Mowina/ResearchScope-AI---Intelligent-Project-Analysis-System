@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 from dotenv import load_dotenv
-from project_analysis_crew_fixed import analyze_project
+from src.project_analysis_crew_fixed import analyze_project
 import time
 
 # Load environment variables
