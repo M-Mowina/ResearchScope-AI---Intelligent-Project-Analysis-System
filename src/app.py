@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from project_analysis_crew_fixed import analyze_project
 import time
 
-# Load environment variables
+# Load environment variables from .env file
 load_dotenv()
 
 # Page configuration
@@ -81,23 +81,23 @@ def main():
     st.markdown('<h1 class="main-header">🔬 ResearchScope AI</h1>', unsafe_allow_html=True)
     st.markdown('<p class="sub-header">Intelligent Project Analysis System</p>', unsafe_allow_html=True)
     
+    # --- API Key Check ---
+    # Securely check for the API key from environment variables
+    api_key = os.getenv("GOOGLE_API_KEY")
+    
     # Sidebar
     with st.sidebar:
         st.header("⚙️ Configuration")
         
-        # API Key input
-        api_key = st.text_input(
-            "Google API Key",
-            type="password",
-            help="Enter your Google Generative AI API key",
-            value=os.getenv('GOOGLE_API_KEY', '')
-        )
-        
-        if api_key:
-            os.environ['GOOGLE_API_KEY'] = api_key
-            st.success("✅ API Key configured")
+        if not api_key:
+            st.error("⚠️ API Key Not Found!")
+            st.markdown("""
+                Create a `.env` file in the project root and add:
+                `GOOGLE_API_KEY="YOUR_KEY_HERE"`
+            """)
+            st.stop()
         else:
-            st.warning("⚠️ Please enter your Google API Key")
+            st.success("✅ API Key Loaded")
         
         st.markdown("---")
         
@@ -171,9 +171,7 @@ def main():
         
         # Analysis button
         if st.button("🚀 Start Analysis", type="primary", use_container_width=True):
-            if not api_key:
-                st.error("❌ Please enter your Google API Key in the sidebar")
-            elif not project_description.strip():
+            if not project_description.strip():
                 st.error("❌ Please enter a project description")
             else:
                 with st.spinner("🤖 AI agents are analyzing your project..."):
